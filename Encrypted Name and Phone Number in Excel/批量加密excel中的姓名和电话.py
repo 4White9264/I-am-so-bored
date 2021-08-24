@@ -2,7 +2,7 @@ import xlrd
 import xlwt
 
 # part of the code take from https://blog.csdn.net/u013250071/article/details/81911434
-# 具体可以参考附件中的两个excel
+
 
 
 def read_excel_xls(path):
@@ -29,15 +29,15 @@ def encrypt_last(data):
     for name_number in data:
 
         if data.index(name_number)%2 == 0:
-            if len(name_number)<= 2: # 如果姓名字数小于或等于两个字
-                name_number[-1] = name_number[0]+"*"
-            elif len(name_number) ==3 or len(name_number) == 4: # 如果姓名字数是三个字或者四个字
+            if len(name_number)<= 2: #如果姓名字数小于或等于两个字
+                name_number = name_number[0]+"*"
+            elif len(name_number) ==3 or len(name_number) == 4: #如果姓名字数是三个字或者四个字
                 name_number = name_number[0:1] + "**"
-            else: # 如果姓名字数在五个字或以上
+            else: #如果姓名字数在五个字或以上
                 name_number = name_number[0] + (len(name_number)-1)*"*"
             name_number_output.append(name_number)
         else:
-            name_number = str(name_number)[0:3] + "****" + str(name_number)[6:10]
+            name_number = str(name_number)[0:3] + "****" + str(name_number)[7:11]
             name_number_output.append(name_number)
 
     return name_number_output
@@ -52,9 +52,10 @@ def write_excel_xls(path, input):
     row = 1
     count = 0
     for index in range(0,len(input),2):
-        sheet.write(row,0,input[index]) # 填写加密后姓名
-        sheet.write(row,1,input[index+1]) # 填写加密后的电话
+        sheet.write(row,0,input[index]) #填写加密后姓名
+        sheet.write(row,1,input[index+1]) #填写加密后的电话
         row += 1
+        print(input[index])
 
 
 
@@ -64,5 +65,5 @@ def write_excel_xls(path, input):
 
 
 
-data = read_excel_xls("工作簿（加密前）.xls")
-write_excel_xls("工作簿(加密后）.xls",encrypt_last(data))
+data = read_excel_xls("加密前.xlsx")
+write_excel_xls("加密后.xls",encrypt_last(data))
