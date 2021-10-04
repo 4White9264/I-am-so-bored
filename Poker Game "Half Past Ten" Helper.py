@@ -43,7 +43,7 @@ def card(holding_value, new_value):
             else:
                 possible_card.append(int(need_value))
                 need_value -= 1
-        print("你还可以拿如下的牌：")
+        print("That's what you can get：")
         for each_card in possible_card:
             each_card = str(each_card)
             print(each_card)
