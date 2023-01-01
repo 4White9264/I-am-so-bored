@@ -1,8 +1,11 @@
+import re
+
+
 def error(card_split):
     color_data = ["S", "H", "C", "D"]
-    card_data = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
+    card_number_data = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
     for each in card_split:
-        if each[0] not in card_data or each[1] not in color_data:
+        if each[0] not in card_number_data or each[1] not in color_data:
             print("扑克输入错误")
             return False
     card_split_dic = {}.fromkeys(card_split)  # 这种方法建立字典，会把列表里的元素当做字典的键，由于字典的键不能重复，所以会自动去重
@@ -23,22 +26,53 @@ def sorted_card(card_split):
     return sorted_card_split
 
 
-def combo_define(player_card, house_card, card_data, color_data):
+def combo_defined(card_split):
+    result = ""
+    link_count = 0
+    color_data = ["S", "H", "C", "D"]
+    card_number_data = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
+
+    card_number = [card[0] for card in card_split]
+    card_color = [card[1] for card in card_split]
+
+    for each_card in card_color:
+        if card_color.count(each_card) >= 5:
+            result = "同花" + str(each_card) + " "
+
+    for each_card in card_number:
+        if card_number.count(each_card) == 4 and each_card not in result:
+            result += "四个" + each_card + " "
+
+        if card_number.count(each_card) == 3 and each_card not in result:
+            result += "三个" + each_card + " "
+
+        if card_number.count(each_card) == 2 and each_card not in result:
+            result += "两个" + each_card + " "
+
+    # 顺子判定未完成
+
+
+    print(card_split, result)
+    pass
+
+
+def card_sum(player_card, house_card):
     card_sum = player_card + house_card
-    card_split = [str(card_sum[0:2]), str(card_sum[2:4]), str(card_sum[4:6]), str(card_sum[6:8]), str(card_sum[8:10]),
-                  str(card_sum[10:12]), str(card_sum[12:14])]
+
+    card_split = re.findall(r'.{2}', card_sum)  # 正则化语法，数字代表按照多少长度将字符串等分成列元素
     if not error(card_split):
         return 0
     sorted_card_split = sorted_card(card_split)  # 按照从小到大的顺序整理牌
-    print(sorted_card_split)
+    combo_defined(sorted_card_split)
+    # print(sorted_card_split)
 
 
 def main():
-    color_data = ["S", "H", "C", "D"]
-    card_data = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
     player_card = "JHQH"
-    house_card = "JS7C8DASQS"
-    combo_define(player_card, house_card, card_data, color_data)
+    first_round = "JSJC8D"
+    second_round = "8C"
+    third_round = "KH"
+    card_sum(player_card, first_round + second_round + third_round)
 
 
 main()
